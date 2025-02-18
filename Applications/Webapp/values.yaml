@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 
-webapp-test:
+webapp:
   replicaCount: 1
   webApp:
     name: web-app
