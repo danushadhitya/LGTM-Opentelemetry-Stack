@@ -1,8 +1,0 @@
-apiVersion: v1
-name: headlamp
-version: v1
-dependencies: # A list of the chart requirements (optional)
-  - name: headlamp
-    version: 0.28.1
-    repository: https://headlamp-k8s.github.io/headlamp/
-    
