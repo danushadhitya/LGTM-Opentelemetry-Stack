@@ -1,4 +1,4 @@
-otel-collector:
+opentelemetry-collector:
   # Default values for opentelemetry-collector.
   # This is a YAML-formatted file.
   # Declare variables to be passed into your templates.
