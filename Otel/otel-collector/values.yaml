@@ -209,7 +209,7 @@ opentelemetry-collector:
 
   # OpenTelemetry Collector executable
   command:
-    name: "otelcol
+    name: "otelcol"
     extraArgs: []
 
   serviceAccount:
