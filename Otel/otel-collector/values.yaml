@@ -90,38 +90,7 @@ opentelemetry-collector:
     # existingPath: ""
 
 
-  # When enabled, the chart will configure the collector to emit its traces, metrics, and logs over http via the OTLP using the Otel Go SDK.
-  # If internalTelemetryViaOTLP.metrics.enabled Ithe chart will remove the default prometheus receiver (which was configured to scrape the Collector's metrics)
-  # and the service.telemetry.metrics.address value.
-  # Learn more about the Collector telemetry at https://opentelemetry.io/docs/collector/internal-telemetry/.
-  #
-  # THIS OPTION IS EXPERIMENTAL AND SUBJECT TO BREAKING CHANGES
-  internalTelemetryViaOTLP:
-    # The endpoint where the telemetry will be exported
-    endpoint: ""
-    # Optional headers to configure the exporters
-    headers: []
-      # - name: "x-dest-auth"
-      #   value: "some auth key"
-    traces:
-      enabled: false
-      # overrides internalTelemetryViaOTLP.endpoint for traces
-      endpoint: ""
-      # overrides internalTelemetryViaOTLP.headers for traces
-      headers: []
-    metrics:
-      enabled: false
-      # overrides internalTelemetryViaOTLP.endpoint for metrics
-      endpoint: ""
-      # overrides internalTelemetryViaOTLP.headers for metrics
-      headers: []
-    logs:
-      enabled: false
-      # overrides internalTelemetryViaOTLP.endpoint for logs
-      endpoint: ""
-      # overrides internalTelemetryViaOTLP.headers for logs
-      headers: []
-
+ 
   # Base collector configuration.
   # Supports templating. To escape existing instances of {{ }}, use {{` <original content> `}}.
   # For example, {{ REDACTED_EMAIL }} becomes {{` {{ REDACTED_EMAIL }} `}}.
@@ -240,7 +209,7 @@ opentelemetry-collector:
 
   # OpenTelemetry Collector executable
   command:
-    name: ""
+    name: "otelcol
     extraArgs: []
 
   serviceAccount:
