@@ -1,82 +1,42 @@
 mimir-distributed:  
-  minio:
-    enabled: false  # disable MinIO since we are not using remote object storage
-
-  ingester:
-    persistentVolume:
-      enabled: true
-      size: 10Gi
-      storageClass: standard  # or your preferred storage class
-    extraArgs:
-      - "-blocks-storage.tsdb.path=/data/tsdb"
-      - "-blocks-storage.tsdb.retention-period=24h"  # keep blocks for 24h locally
-
-  store_gateway:
-    enabled: false  # disable if you are not doing long-term block query federation
-
-  compactor:
-    enabled: false  # disable compaction of remote blocks
-
-  querier:
-    extraArgs:
-      - "-store.gateway.enabled=false"
-
-  distributor:
-    extraArgs:
-      - "-distributor.ingestion-rate-limit=0"
-      - "-distributor.ingestion-burst-size=0"
-
-  ruler:
-    enabled: false
-
-  alertmanager:
-    enabled: false
-
-  chunks-cache:
-    enabled: false
-
-  results-cache:
-    enabled: false
-
-  memcachedExporter:
-    enabled: false
-
-  gateway:
-    enabled: true
-    ingress:
-      enabled: true
-      hosts:
-        - host: mimir.local
-          paths:
-            - /
-
-  # General config
   global:
-    storage:
-      backend: filesystem
-    extraEnv:
-      - name: MIMIR_LOCAL_STORAGE_DIR
-        value: "/data/tsdb"
-
-  # Volumes for ingesters
+    extraEnvFrom: 
+      - secretRef:
+          name: gcp-private-key
   mimir:
-    ingester:
-      volumeMounts:
-        - name: tsdb
-          mountPath: /data/tsdb
-      volumes:
-        - name: tsdb
-          persistentVolumeClaim:
-            claimName: mimir-ingester-pvc
+    structuredConfig:
+      common:
+        storage:
+          backend: gcs
+          gcs:
+            service_account: |
+              {
+              "type": "service_account",
+              "project_id": "elated-ranger-349805",
+              "private_key_id": "529814b164bc8611e76b71387879388e8eb471fe",
+              "private_key": ${PRIVATE_KEY},
+              "client_email": "mimir-bucket-access@elated-ranger-349805.iam.gserviceaccount.com",
+              "client_id": "107843024972929082971",
+              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+              "token_uri": "https://oauth2.googleapis.com/token",
+              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mimir-bucket-access%40elated-ranger-349805.iam.gserviceaccount.com",
+              "universe_domain": "googleapis.com"
+              }
 
-    persistentVolumeClaim:
-      create: true
-      name: mimir-ingester-pvc
-      accessModes: ["ReadWriteOnce"]
-      resources:
-        requests:
-          storage: 10Gi
+      blocks_storage:
+        gcs:
+          bucket_name: mimir-blocks
 
+      alertmanager_storage:
+        gcs:
+          bucket_name: mimir-alertmanager
+
+      ruler_storage:
+        gcs:
+          bucket_name: mimir-ruler
+
+       
 
 grafana:
   namespaceOverride: "grafana"
