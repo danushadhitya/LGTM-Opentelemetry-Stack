@@ -3,6 +3,8 @@ mimir-distributed:
     extraEnvFrom: 
       - secretRef:
           name: gcp-private-key
+  minio:
+    enabled: false
   mimir:
     structuredConfig:
       common:
