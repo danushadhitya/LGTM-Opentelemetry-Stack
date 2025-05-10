@@ -6,3 +6,6 @@ dependencies: # A list of the chart requirements (optional)
     version: 5.7.0
     repository: https://grafana.github.io/helm-charts
     
+  - name: grafana
+    version: 9.0.0
+    repository: https://grafana.github.io/helm-charts

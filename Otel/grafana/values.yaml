@@ -76,3 +76,7 @@ mimir-distributed:
       resources:
         requests:
           storage: 10Gi
+
+
+grafana:
+  namespaceOverride: "grafana"
