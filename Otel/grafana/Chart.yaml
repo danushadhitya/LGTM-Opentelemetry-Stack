@@ -1,0 +1,8 @@
+apiVersion: v1
+name: grafana-stack
+version: v1
+dependencies: # A list of the chart requirements (optional)
+  - name: mimir-distributed
+    version: 5.7.0
+    repository: https://grafana.github.io/helm-charts
+    

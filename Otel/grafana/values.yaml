@@ -1,0 +1,78 @@
+mimir-distributed:  
+  minio:
+    enabled: false  # disable MinIO since we are not using remote object storage
+
+  ingester:
+    persistentVolume:
+      enabled: true
+      size: 10Gi
+      storageClass: standard  # or your preferred storage class
+    extraArgs:
+      - "-blocks-storage.tsdb.path=/data/tsdb"
+      - "-blocks-storage.tsdb.retention-period=24h"  # keep blocks for 24h locally
+
+  store_gateway:
+    enabled: false  # disable if you are not doing long-term block query federation
+
+  compactor:
+    enabled: false  # disable compaction of remote blocks
+
+  querier:
+    extraArgs:
+      - "-store.gateway.enabled=false"
+
+  distributor:
+    extraArgs:
+      - "-distributor.ingestion-rate-limit=0"
+      - "-distributor.ingestion-burst-size=0"
+
+  ruler:
+    enabled: false
+
+  alertmanager:
+    enabled: false
+
+  chunks-cache:
+    enabled: false
+
+  results-cache:
+    enabled: false
+
+  memcachedExporter:
+    enabled: false
+
+  gateway:
+    enabled: true
+    ingress:
+      enabled: true
+      hosts:
+        - host: mimir.local
+          paths:
+            - /
+
+  # General config
+  global:
+    storage:
+      backend: filesystem
+    extraEnv:
+      - name: MIMIR_LOCAL_STORAGE_DIR
+        value: "/data/tsdb"
+
+  # Volumes for ingesters
+  mimir:
+    ingester:
+      volumeMounts:
+        - name: tsdb
+          mountPath: /data/tsdb
+      volumes:
+        - name: tsdb
+          persistentVolumeClaim:
+            claimName: mimir-ingester-pvc
+
+    persistentVolumeClaim:
+      create: true
+      name: mimir-ingester-pvc
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi
