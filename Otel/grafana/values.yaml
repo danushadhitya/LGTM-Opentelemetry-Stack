@@ -3,6 +3,12 @@ mimir-distributed:
     extraEnvFrom: 
       - secretRef:
           name: gcp-private-key
+
+    serviceAccount:
+      create: true
+      name: mimir  
+  enterprise:
+    enabled: false       
   minio:
     enabled: false
   mimir:
@@ -37,7 +43,22 @@ mimir-distributed:
       ruler_storage:
         gcs:
           bucket_name: mimir-ruler
-  
-
+  alertmanager:
+    enabled: false
+  ingestor:
+    replicas: 1
+    zoneAwareReplication:
+      enabled: false
+  ruler_querier:
+    replicas: 1
+  querier:
+    replicas: 1
+  query_scheduler:
+    replicas: 1
+  store_gateway:
+    zoneAwareReplication:
+      enabled: false      
+  gateway:
+    enabled: false     
 grafana:
   namespaceOverride: "grafana"
