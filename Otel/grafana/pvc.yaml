@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: storage-grafana-mimir-store-gateway-0
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /mnt/data/mimir-store-gateway-0
+  claimRef:
+    name: storage-grafana-mimir-store-gateway-0
+    namespace: grafana
