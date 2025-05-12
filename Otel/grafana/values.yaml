@@ -4,11 +4,11 @@ mimir-distributed:
       - secretRef:
           name: gcp-private-key
 
-    serviceAccount:
-      create: true
-      name: mimir  
-      annotations:
-        iam.gke.io/gcp-service-account: mimir-bucket-access@elated-ranger-349805.iam.gserviceaccount.com
+  serviceAccount:
+    create: true
+    name: mimir  
+    annotations:
+      iam.gke.io/gcp-service-account: mimir-bucket-access@elated-ranger-349805.iam.gserviceaccount.com
   enterprise:
     enabled: false       
   minio:
