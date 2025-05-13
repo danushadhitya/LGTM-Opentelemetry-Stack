@@ -19,21 +19,7 @@ mimir-distributed:
         storage:
           backend: gcs
           gcs:
-            service_account: |
-              {
-              "type": "service_account",
-              "project_id": "elated-ranger-349805",
-              "private_key_id": "529814b164bc8611e76b71387879388e8eb471fe",
-              "private_key": ${private_key},
-              "client_email": "mimir-bucket-access@elated-ranger-349805.iam.gserviceaccount.com",
-              "client_id": "107843024972929082971",
-              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-              "token_uri": "https://oauth2.googleapis.com/token",
-              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mimir-bucket-access%40elated-ranger-349805.iam.gserviceaccount.com",
-              "universe_domain": "googleapis.com"
-              }
-
+            service_account: ${PRIVATE_KEY}
       blocks_storage:
         backend: gcs
         gcs:
