@@ -19,19 +19,19 @@ mimir-distributed:
         storage:
           backend: gcs
           gcs:
-            service_account: |-
+            service_account: |
               {
-                "type": "service_account",
-                "project_id": "elated-ranger-349805",
-                "private_key_id": "529814b164bc8611e76b71387879388e8eb471fe",
-                "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCpRUkr/IVDaTnH\nWdigijxXySTf6Et6Nt4auhKb+Zd3XC5Ve3nEip/t4aGr48n0sDXftosq2KU/SsY0\nTODUuS6PuA5TevvkZb+PQ8t2BeQpI8Fbxk08i0LAm3XLFaUoXDg0QJUuUlpjuheQ\nGEq2ixZzGMjnQtCa7Bcq2iaSdrlVykFH8fNgIe1UmIxe4+ns4fCJS2dNI6ePKpIN\nAw7Rj2rm5yuz6U9ZPFX3wMGXU3LhKIP60gQEti1xbMi40/rKKxLc93U5tZt5hdtj\nENJtZnnKLENDWtxEaA6Wz/ChTRmXhyWUY6AH8m2tFFzXRx5EjVhGalMCufdRHndN\n5HgFwAepAgMBAAECggEAGcPVlO/teurP5COtYRZZhAU2ayyJHJOwcAIFph8yKnVq\nChHu4Xc2S7et66OTEH8n3CMFgOKUGJOxorFXAZokV7Ts3VEZeVTxeQWZOSBBb++k\n1WrUQ9Rwty+SmPR0/LU4yt9PtcrMPmTLhF/mM23tX1yU6/qUFRi9mAS3nVCb+k49\nBo20nL99yhyjgfnFc0ihhowvArfPYURUZXwuv32epbIAIIQTzTwkm5WqZp9BznXU\nc1vJudtVj5g3OOqLVHwEdKvSDMlVUkiTHhXwBQBASvxxKcLPOfgJRc0A2cPwUPNh\nZJfMU7bWlg/12hJ4TLA1xl7c0JUEclXYwGjDjwXMNwKBgQDWTJJy+W0QXkubdI07\n0lBbE5L/9B0FJvSPwYru6cx1ZThGjVIKw4gyAPIOt9Acb9KFxL8TomFZyAJ2vXnQ\nQHMa5dnytWQs0W/smr9EqfH81DOFJQyBMaRAw9PR3JGTaHWpmLAzCh5UwjoV1kfr\nSWfnzW2IwKOXbfErdVeUVNbz9wKBgQDKNZifdFf5s657ixVr2omorT/Z0czM9EK/\nE15AHuA/6HJFaWlpvJJO2o7z2Beod/DLM5DTeJ42P16FH+OpWa6AI/eF6hmc3A4/\nzxROfkYYThD27kdZoQh4vjq1QvKr7IhBj/aWaTx5Lm9D77RlKSWORyjSo3TnLEu3\npikwokK5XwKBgHWwp90szpDmuG8vm0D3R9o87cZTsnxZ4IXyrPJ4xCjU5gsZIa13\npRyRGF6s5EY5w0xjuOx3iS9dgLzlYjjUrGJhSUjaBaH3g5hVhCWZj6Rihcjhh/SL\n5sEKyxG+KNTj0XrKuDnPnMi/wlarz+OP9NiBIV6xLSbE4mYTk32K+mIRAoGAE+g6\n4lfd4WNjJh6HOVsGemi0BIm3E+ZoO894U++2PBRyS4sZKaO687BoqnD3w0orlpW5\nCFizmruaXpjJHP8LQupHkBN/+gVgEcAdS6z60aG94dGLjLNh1iFEPlwc7/gVYf7+\nU8iAf52mrpWGuP7YB63Rwwr8k1W1Dpt5KqSO1RkCgYBuOfpWtc9ZBy7SqjQBhIZ6\nG8jOrLh4P7qBfES8spBmnsZfCjvDMNTF8vZB07PsY5NJeizFDle2XQ6cDR4HMfmC\nBpyJQIp9CrN5c+l37QSkSSqRhJ/uzJBWE9CN5lBhWObPVA5ca8b6F9ToAsqzq1gM\n4YQjtpn4WcQQV0KlSqSpGA==\n-----END PRIVATE KEY-----\n",
-                "client_email": "mimir-bucket-access@elated-ranger-349805.iam.gserviceaccount.com",
-                "client_id": "107843024972929082971",
-                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-                "token_uri": "https://oauth2.googleapis.com/token",
-                "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-                "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mimir-bucket-access%40elated-ranger-349805.iam.gserviceaccount.com",
-                "universe_domain": "googleapis.com"
+              "type": "service_account",
+              "project_id": "elated-ranger-349805",
+              "private_key_id": "529814b164bc8611e76b71387879388e8eb471fe",
+              "private_key": ${private_key},
+              "client_email": "mimir-bucket-access@elated-ranger-349805.iam.gserviceaccount.com",
+              "client_id": "107843024972929082971",
+              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+              "token_uri": "https://oauth2.googleapis.com/token",
+              "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+              "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mimir-bucket-access%40elated-ranger-349805.iam.gserviceaccount.com",
+              "universe_domain": "googleapis.com"
               }
 
       blocks_storage:
