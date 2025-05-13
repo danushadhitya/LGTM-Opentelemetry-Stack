@@ -60,8 +60,6 @@ mimir-distributed:
   store_gateway:
     zoneAwareReplication:
       enabled: false   
-    podAnnotations:
-      iam.gke.io/gcp-service-account: mimir-bucket-access@elated-ranger-349805.iam.gserviceaccount.com
 
   gateway:
     enabled: false     
