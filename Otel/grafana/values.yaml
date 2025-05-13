@@ -1,6 +1,5 @@
 mimir-distributed:  
   global:
-    configStorageType: Secret
     extraEnvFrom:
       - secretRef:
           name: gcp-private-key
@@ -58,6 +57,10 @@ mimir-distributed:
       enabled: true
     persisentVolume:
       enabled: true   
+  compactor:
+    extraArgs:
+      - name: config.expand-env
+        value: true    
 
   gateway:
     enabled: false     
