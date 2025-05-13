@@ -56,11 +56,7 @@ mimir-distributed:
     statefulSet:
       enabled: true
     persisentVolume:
-      enabled: true   
-  compactor:
-    extraArgs:
-      - name: config.expand-env
-        value: true    
+      enabled: true    
 
   gateway:
     enabled: false     
