@@ -38,6 +38,8 @@ mimir-distributed:
         backend: gcs
         gcs:
           bucket_name: mimir-blocks
+        bucket_store:
+          sync_dir: "data"  
 
       alertmanager_storage:
         gcs:
