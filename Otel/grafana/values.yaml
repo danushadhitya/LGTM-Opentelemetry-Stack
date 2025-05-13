@@ -1,8 +1,6 @@
 mimir-distributed:  
   global:
-    extraEnvFrom:
-      - secretRef:
-          name: gcp-private-key
+  
   serviceAccount:
     create: true
     name: mimir  
