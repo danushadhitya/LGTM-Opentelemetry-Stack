@@ -53,10 +53,6 @@ mimir-distributed:
   store_gateway:
     zoneAwareReplication:
       enabled: false  
-    extraArgs:
-      - name: log_level
-        value: debug
-
     statefulSet:
       enabled: true
     persisentVolume:
