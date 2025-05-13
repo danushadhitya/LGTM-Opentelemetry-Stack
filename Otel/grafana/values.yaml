@@ -1,20 +1,8 @@
 mimir-distributed:  
   global:
-    extraVolumes:
-      - name: gcp-private-key
-        secret:
-          secretName: gcp-private-key
-
-    extraVolumeMounts:
-      - name: gcp-private-key
-        mountPath: /var/secrets/gcp
-        readOnly: true      
-    
-    extraEnv:
-      - name: GOOGLE_APPLICATION_CREDENTIALS
-        value: /var/secrets/gcp/GOOGLE_APPLICATION_CREDENTIALS
-      - name: CLOUDSDK_CORE_PROJECT
-        value: elated-ranger-349805
+    extraEnvFrom:
+      - secretRef:
+          name: gcp-private-key
   serviceAccount:
     create: true
     name: mimir  
@@ -30,7 +18,8 @@ mimir-distributed:
         storage:
           backend: gcs
           gcs:
-            service_account: ${GOOGLE_APPLICATION_CREDENTIALS}
+            service_account: | 
+              ${GOOGLE_APPLICATION_CREDENTIALS}
       blocks_storage:
         backend: gcs
         gcs:
