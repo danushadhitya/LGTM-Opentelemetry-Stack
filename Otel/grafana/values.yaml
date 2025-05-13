@@ -40,6 +40,10 @@ mimir-distributed:
     replicas: 1
     zoneAwareReplication:
       enabled: false
+    statefulSet:
+      enabled: true
+    persisentVolume:
+      enabled: true  
   ruler_querier:
     replicas: 1
   querier:
@@ -48,7 +52,11 @@ mimir-distributed:
     replicas: 1
   store_gateway:
     zoneAwareReplication:
-      enabled: false   
+      enabled: false  
+    statefulSet:
+      enabled: true
+    persisentVolume:
+      enabled: true   
 
   gateway:
     enabled: false     
