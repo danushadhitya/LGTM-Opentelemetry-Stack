@@ -35,6 +35,7 @@ mimir-distributed:
               }
 
       blocks_storage:
+        backend: gcs
         gcs:
           bucket_name: mimir-blocks
 
