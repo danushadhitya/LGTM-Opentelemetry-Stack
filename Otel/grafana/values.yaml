@@ -1,8 +1,18 @@
 mimir-distributed:  
   global:
-    extraEnvFrom: 
-      - secretRef:
-          name: gcp-private-key
+    extraVolumes:
+      - name: gcp-private-key
+        secret:
+          secretName: gcp-private-key
+
+    extraVolumeMounts:
+      - name: gcp-private-key
+        mountPath: /var/secrets/gcp
+        readOnly: true      
+    
+    extraEnv:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: /var/secrets/gcp/GOOGLE_APPLICATION_CREDENTIALS
 
   serviceAccount:
     create: true
