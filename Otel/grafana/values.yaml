@@ -1,6 +1,4 @@
 mimir-distributed:  
-  global:
-  
   serviceAccount:
     create: true
     name: mimir  
