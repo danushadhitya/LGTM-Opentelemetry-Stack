@@ -19,7 +19,7 @@ mimir-distributed:
         storage:
           backend: gcs
           gcs:
-            service_account: ${PRIVATE_KEY}
+            service_account: ${GOOGLE_APPLICATION_CREDENTIALS}
       blocks_storage:
         backend: gcs
         gcs:
