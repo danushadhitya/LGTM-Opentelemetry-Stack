@@ -54,7 +54,8 @@ mimir-distributed:
     zoneAwareReplication:
       enabled: false  
     extraArgs:
-      log_level: debug
+      - name: log_level
+        value: debug
 
     statefulSet:
       enabled: true
