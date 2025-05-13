@@ -24,7 +24,7 @@ mimir-distributed:
               "type": "service_account",
               "project_id": "elated-ranger-349805",
               "private_key_id": "529814b164bc8611e76b71387879388e8eb471fe",
-              "private_key": ${PRIVATE_KEY},
+              "private_key": ${private_key},
               "client_email": "mimir-bucket-access@elated-ranger-349805.iam.gserviceaccount.com",
               "client_id": "107843024972929082971",
               "auth_uri": "https://accounts.google.com/o/oauth2/auth",
