@@ -13,7 +13,8 @@ mimir-distributed:
     extraEnv:
       - name: GOOGLE_APPLICATION_CREDENTIALS
         value: /var/secrets/gcp/GOOGLE_APPLICATION_CREDENTIALS
-
+      - name: CLOUDSDK_CORE_PROJECT
+        value: elated-ranger-349805
   serviceAccount:
     create: true
     name: mimir  
