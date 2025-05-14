@@ -59,7 +59,11 @@ mimir-distributed:
       enabled: true
     persisentVolume:
       enabled: true    
-
+  nginx:
+    basicAuth: 
+      enabled: true
+      username: hello
+      password: hello
   gateway:
     enabled: false     
 grafana:
