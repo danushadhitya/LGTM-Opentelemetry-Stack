@@ -138,13 +138,10 @@ opentelemetry-collector:
         - health_check
       pipelines:
         metrics:
-          exporters:
-            - otlp
-          processors:
-            - memory_limiter
-            - batch
-          receivers:
-            - otlp
+          exporters: [otlp]
+          processors: [batch, memory_limiter]
+          receivers: [otlp]
+            
     
        
 
