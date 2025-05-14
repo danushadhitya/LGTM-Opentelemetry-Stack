@@ -97,6 +97,7 @@ opentelemetry-collector:
   config:
     exporters:
       debug: {}
+      otlphttp: http://grafana-mimir-nginx.grafana.svc.cluster.local/otlp
     extensions:
       # The health_check extension is mandatory for this chart.
       # Without the health_check extension the collector will fail the readiness and liveliness probes.
@@ -114,14 +115,7 @@ opentelemetry-collector:
         # By default spike_limit_mib is set to 25% of ".Values.resources.limits.memory"
         spike_limit_percentage: 25
     receivers:
-      jaeger:
-        protocols:
-          grpc:
-            endpoint: ${env:MY_POD_IP}:14250
-          thrift_http:
-            endpoint: ${env:MY_POD_IP}:14268
-          thrift_compact:
-            endpoint: ${env:MY_POD_IP}:6831
+      jaeger: null
       otlp:
         protocols:
           grpc:
@@ -129,16 +123,8 @@ opentelemetry-collector:
           http:
             endpoint: ${env:MY_POD_IP}:4318
       # if internalTelemetryViaOTLP.metrics.enabled = true, prometheus receiver will be removed
-      prometheus:
-        config:
-          scrape_configs:
-            - job_name: opentelemetry-collector
-              scrape_interval: 10s
-              static_configs:
-                - targets:
-                    - ${env:MY_POD_IP}:8888
-      zipkin:
-        endpoint: ${env:MY_POD_IP}:9411
+      prometheus: null
+      zipkin: null
     service:
       telemetry:
         metrics:
@@ -151,34 +137,16 @@ opentelemetry-collector:
       extensions:
         - health_check
       pipelines:
-        logs:
-          exporters:
-            - debug
-          processors:
-            - memory_limiter
-            - batch
-          receivers:
-            - otlp
         metrics:
           exporters:
-            - debug
+            - otlphttp
           processors:
             - memory_limiter
             - batch
           receivers:
             - otlp
-            # if internalTelemetryViaOTLP.metrics.enabled = true, prometheus receiver will be removed
-            - prometheus
-        traces:
-          exporters:
-            - debug
-          processors:
-            - memory_limiter
-            - batch
-          receivers:
-            - otlp
-            - jaeger
-            - zipkin
+    
+       
 
   # Helm currently has an issue (https://github.com/helm/helm/pull/12879) when using null to remove
   # default configuration from a subchart. The result is that you cannot remove default configuration
