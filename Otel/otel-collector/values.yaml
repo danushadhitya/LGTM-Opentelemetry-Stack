@@ -99,6 +99,8 @@ opentelemetry-collector:
       debug: {}
       otlphttp: 
         endpoint: http://grafana-mimir-nginx.grafana.svc.cluster.local/otlp
+        headers:
+          "X-Scope-OrgID": tenant-1 | tenant-2 | tenant-3
     extensions:
       # The health_check extension is mandatory for this chart.
       # Without the health_check extension the collector will fail the readiness and liveliness probes.
