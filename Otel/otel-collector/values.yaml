@@ -139,7 +139,7 @@ opentelemetry-collector:
       pipelines:
         metrics:
           exporters:
-            - otlphttp
+            - otlp
           processors:
             - memory_limiter
             - batch
