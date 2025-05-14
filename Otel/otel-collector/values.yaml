@@ -69,7 +69,7 @@ opentelemetry-collector:
     # Best used with mode = deployment or statefulset.
     # See https://opentelemetry.io/docs/kubernetes/collector/components/#kubernetes-objects-receiver for details on the receiver.
     kubernetesEvents:
-      enabled: true
+      enabled: false
     # Configures the Kubernetes Cluster Receiver to collect cluster-level metrics.
     # Adds the k8s_cluster receiver to the metrics pipeline
     # and adds the necessary rules to ClusterRole.
