@@ -116,7 +116,6 @@ opentelemetry-collector:
         # By default spike_limit_mib is set to 25% of ".Values.resources.limits.memory"
         spike_limit_percentage: 25
     receivers:
-      jaeger: null
       otlp:
         protocols:
           grpc:
@@ -124,8 +123,6 @@ opentelemetry-collector:
           http:
             endpoint: ${env:MY_POD_IP}:4318
       # if internalTelemetryViaOTLP.metrics.enabled = true, prometheus receiver will be removed
-      prometheus: null
-      zipkin: null
     service:
       telemetry:
         metrics:
