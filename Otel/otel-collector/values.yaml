@@ -101,12 +101,18 @@ opentelemetry-collector:
         endpoint: http://grafana-mimir-nginx.grafana.svc.cluster.local/otlp
         headers:
           "X-Scope-OrgID": tenant-1 | tenant-2 | tenant-3
+        auth:
+          authenticator: basicauth/otlp  
     extensions:
       # The health_check extension is mandatory for this chart.
       # Without the health_check extension the collector will fail the readiness and liveliness probes.
       # The health_check extension can be modified, but should never be removed.
       health_check:
         endpoint: ${env:MY_POD_IP}:13133
+      basicauth/otlp:
+      client_auth:
+        username: hello
+        password: hello 
     processors:
       batch: {}
       # Default memory limiter configuration for the collector based on k8s resource limits.
@@ -144,6 +150,7 @@ opentelemetry-collector:
                     port: 8888
       extensions:
         - health_check
+        - basicauth/otlp
       pipelines:
         metrics:
           exporters:
