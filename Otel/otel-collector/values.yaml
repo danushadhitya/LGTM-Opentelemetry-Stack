@@ -122,6 +122,14 @@ opentelemetry-collector:
             endpoint: ${env:MY_POD_IP}:4317
           http:
             endpoint: ${env:MY_POD_IP}:4318
+      k8s_cluster:
+        auth_type: serviceAccount
+        node_conditions_to_report:
+          - Ready
+          - MemoryPressure
+        allocatable_types_to_report:
+          - cpu
+          - memory      
       # if internalTelemetryViaOTLP.metrics.enabled = true, prometheus receiver will be removed
     service:
       telemetry:
@@ -143,6 +151,7 @@ opentelemetry-collector:
             - batch
           receivers:
             - otlp
+            - k8s_cluster
     
        
 
