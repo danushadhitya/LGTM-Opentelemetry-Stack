@@ -100,7 +100,7 @@ opentelemetry-collector:
       otlphttp: 
         endpoint: http://grafana-mimir-nginx.grafana.svc.cluster.local/otlp
         headers:
-          "X-Scope-OrgID": tenant-1|tenant-2|tenant-3
+          "X-Scope-OrgID": tenant-1
         auth:
           authenticator: basicauth/otlp  
     extensions:
