@@ -97,7 +97,8 @@ opentelemetry-collector:
   config:
     exporters:
       debug: {}
-      otlphttp: http://grafana-mimir-nginx.grafana.svc.cluster.local/otlp
+      otlphttp: 
+        endpoint: http://grafana-mimir-nginx.grafana.svc.cluster.local/otlp
     extensions:
       # The health_check extension is mandatory for this chart.
       # Without the health_check extension the collector will fail the readiness and liveliness probes.
@@ -138,10 +139,13 @@ opentelemetry-collector:
         - health_check
       pipelines:
         metrics:
-          exporters: [otlp]
-          processors: [batch, memory_limiter]
-          receivers: [otlp]
-            
+          exporters:
+            - otlp
+          processors:
+            - memory_limiter
+            - batch
+          receivers:
+            - otlp
     
        
 
