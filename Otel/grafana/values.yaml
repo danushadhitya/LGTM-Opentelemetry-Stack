@@ -68,7 +68,13 @@ mimir-distributed:
     enabled: false     
 grafana:
   namespaceOverride: "grafana"
-  dashboards:
-    default:
-      custom-dashboard:
-        file: dashboards/apiserver.json
+  datasources: 
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Mimir
+        type: prometheus
+        url: http://grafana-mimir-nginx.grafana.svc.cluster.local/prometheus
+        access: proxy
+        isDefault: true
+      
