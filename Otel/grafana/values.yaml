@@ -68,3 +68,7 @@ mimir-distributed:
     enabled: false     
 grafana:
   namespaceOverride: "grafana"
+  dashboards:
+    default:
+      custom-dashboard:
+        file: dashboards_out/apiserver.json
