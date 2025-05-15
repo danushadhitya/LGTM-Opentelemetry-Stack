@@ -71,4 +71,4 @@ grafana:
   dashboards:
     default:
       custom-dashboard:
-        file: dashboards_out/apiserver.json
+        file: dashboards/apiserver.json
