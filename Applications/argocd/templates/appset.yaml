@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: apps-from-git
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://github.com/danushadhitya/k8s-homelab.git
+      revision: HEAD
+      directories:
+      - path: Applications/*
+  template:
+    metadata:
+      name: '{{"{{"}}.path.basename{{"}}"}}'
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/danushadhitya/k8s-homelab.git
+        targetRevision: HEAD
+        path: '{{"{{"}}.path.path{{"}}"}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{"{{"}}.path.basename{{"}}"}}'
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true

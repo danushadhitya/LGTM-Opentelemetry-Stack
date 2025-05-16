@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: otel-apps-from-git
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - git:
+      repoURL: https://github.com/danushadhitya/LGTM-Opentelemetry-Stack
+      revision: HEAD
+      directories:
+      - path: Otel/*
+  template:
+    metadata:
+      name: '{{"{{"}}.path.basename{{"}}"}}'
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/danushadhitya/LGTM-Opentelemetry-Stack
+        targetRevision: HEAD
+        path: '{{"{{"}}.path.path{{"}}"}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{"{{"}}.path.basename{{"}}"}}'
+      syncPolicy:
+        syncOptions:
+        - CreateNamespace=true
+        - ServerSideApply=true

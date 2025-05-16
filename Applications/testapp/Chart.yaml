@@ -1,8 +1,0 @@
-apiVersion: v1
-name: test
-version: v1
-dependencies: # A list of the chart requirements (optional)
-  - name: webapp
-    version: 0.1.0
-    repository: https://mohamedanwer006.github.io/helm-hol/charts
-    

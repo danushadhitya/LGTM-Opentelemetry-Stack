@@ -1,6 +1,0 @@
-dependencies:
-- name: webapp
-  repository: https://mohamedanwer006.github.io/helm-hol/charts
-  version: 0.1.0
-digest: sha256:6c2c3587d0a9d9b50dea459527b053c21fa270a67f5a87deafadb91e1e17f772
-generated: "2025-02-17T23:02:13.0488703-08:00"

@@ -1,0 +1,358 @@
+argo-cd:  
+  nameOverride: argocd
+  namespaceOverride: argocd
+  createClusterRoles: true
+
+  crds:
+    # -- Install and upgrade CRDs
+    install: true
+    # -- Keep CRDs on chart uninstall
+    keep: true
+    # -- Annotations to be added to all CRDs
+    annotations: {}
+    # -- Addtional labels to be added to all CRDs
+    additionalLabels: {}
+
+  ## Globally shared configuration
+  global:
+    # -- Default domain used by all components
+    ## Used for ingresses, certificates, SSO, notifications, etc.
+    domain: argocd.example.com
+
+
+    # -- Number of old deployment ReplicaSets to retain. The rest will be garbage collected.
+    revisionHistoryLimit: 3
+
+    # Default image used by all components
+    image:
+      # -- If defined, a repository applied to all Argo CD deployments
+      repository: quay.io/argoproj/argocd
+      # -- Overrides the global Argo CD image tag whose default is the chart appVersion
+      tag: ""
+      # -- If defined, a imagePullPolicy applied to all Argo CD deployments
+      imagePullPolicy: IfNotPresent
+
+    # -- Secrets with credentials to pull images from a private registry
+    imagePullSecrets: []
+
+    # Default logging options used by all components
+    logging:
+      # -- Set the global logging format. Either: `text` or `json`
+      format: text
+      # -- Set the global logging level. One of: `debug`, `info`, `warn` or `error`
+      level: info
+
+  ## Argo Configs
+  configs:
+    # General Argo CD configuration
+    ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cm.yaml
+    cm:
+      # -- Create the argocd-cm configmap for [declarative setup]
+      create: true
+
+    
+      # -- Enable local admin user
+      ## Ref: https://argo-cd.readthedocs.io/en/latest/faq/#how-to-disable-admin-user
+      admin.enabled: true
+
+      # -- Timeout to discover if a new manifests version got published to the repository
+      timeout.reconciliation: 180s
+
+      # -- Timeout to refresh application data as well as target manifests cache
+      timeout.hard.reconciliation: 0s
+
+    params:
+      # -- Create the argocd-cmd-params-cm configmap
+      # If false, it is expected the configmap will be created by something else.
+      create: true
+
+      # -- Annotations to be added to the argocd-cmd-params-cm ConfigMap
+      annotations: {}
+
+      ## Generic parameters
+      # -- Open-Telemetry collector address: (e.g. "otel-collector:4317")
+      otlp.address: ''
+
+      ## Controller Properties
+      # -- Number of application status processors
+      controller.status.processors: 20
+      # -- Number of application operation processors
+      controller.operation.processors: 10
+      # -- Specifies timeout between application self heal attempts
+      controller.self.heal.timeout.seconds: 5
+      # -- Repo server RPC call timeout seconds.
+      controller.repo.server.timeout.seconds: 60
+
+      ## Server properties
+      # -- Run server without TLS
+      ## NOTE: This value should be set when you generate params by other means as it changes ports used by ingress template.
+      server.insecure: false
+      # -- Value for base href in index.html. Used if Argo CD is running behind reverse proxy under subpath different from /
+      server.basehref: /
+      # -- Used if Argo CD is running behind reverse proxy under subpath different from /
+      server.rootpath: ''
+      # -- Directory path that contains additional static assets
+      server.staticassets: /shared/app
+      # -- Disable Argo CD RBAC for user authentication
+      server.disable.auth: false
+      # -- Enable GZIP compression
+      server.enable.gzip: true
+      # -- Enable proxy extension feature. (proxy extension is in Alpha phase)
+      server.enable.proxy.extension: false
+      # -- Set X-Frame-Options header in HTTP responses to value. To disable, set to "".
+      server.x.frame.options: sameorigin
+
+      ## Repo-server properties
+      # -- Limit on number of concurrent manifests generate requests. Any value less the 1 means no limit.
+      reposerver.parallelism.limit: 0
+
+      ## ApplicationSet Properties
+      # -- Modify how application is synced between the generator and the cluster. One of: `sync`, `create-only`, `create-update`, `create-delete`
+      applicationsetcontroller.policy: sync
+      # -- Enables use of the Progressive Syncs capability
+      applicationsetcontroller.enable.progressive.syncs: false
+      # -- A list of glob patterns specifying where to look for ApplicationSet resources. (e.g. `"argocd,argocd-appsets-*"`)
+      # @default -- `""` (default is only the ns where the controller is installed)
+      ## For more information: https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Appset-Any-Namespace/
+      applicationsetcontroller.namespaces: ""
+
+      # -- Enables [Applications in any namespace]
+      ## List of additional namespaces where applications may be created in and reconciled from.
+      ## The namespace where Argo CD is installed to will always be allowed.
+      ## Set comma-separated list. (e.g. app-team-one, app-team-two)
+      application.namespaces: ""
+
+      # -- JQ Path expression timeout
+      ## By default, the evaluation of a JQPathExpression is limited to one second.
+      ## If you encounter a "JQ patch execution timed out" error message due to a complex JQPathExpression
+      ## that requires more time to evaluate, you can extend the timeout period.
+      controller.ignore.normalizer.jq.timeout: "1s"
+
+
+    ssh:
+      # -- Specifies if the argocd-ssh-known-hosts-cm configmap should be created by Helm.
+      create: true
+
+      # -- Annotations to be added to argocd-ssh-known-hosts-cm configmap
+      annotations: {}
+
+      # -- Known hosts to be added to the known host list by default.
+      # @default -- See [values.yaml]
+      knownHosts: |
+        [ssh.github.com]:443 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
+        [ssh.github.com]:443 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+        [ssh.github.com]:443 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=
+        bitbucket.org ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBPIQmuzMBuKdWeF4+a2sjSSpBK0iqitSQ+5BM9KhpexuGt20JpTVM7u5BDZngncgrqDMbWdxMWWOGtZ9UgbqgZE=
+        bitbucket.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIazEu89wgQZ4bqs3d63QSMzYVa0MuJ2e2gKTKqu+UUO
+        bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDQeJzhupRu0u0cdegZIa8e86EG2qOCsIsD1Xw0xSeiPDlCr7kq97NLmMbpKTX6Esc30NuoqEEHCuc7yWtwp8dI76EEEB1VqY9QJq6vk+aySyboD5QF61I/1WeTwu+deCbgKMGbUijeXhtfbxSxm6JwGrXrhBdofTsbKRUsrN1WoNgUa8uqN1Vx6WAJw1JHPhglEGGHea6QICwJOAr/6mrui/oB7pkaWKHj3z7d1IC4KWLtY47elvjbaTlkN04Kc/5LFEirorGYVbt15kAUlqGM65pk6ZBxtaO3+30LVlORZkxOh+LKL/BvbZ/iRNhItLqNyieoQj/uh/7Iv4uyH/cV/0b4WDSd3DptigWq84lJubb9t/DnZlrJazxyDCulTmKdOR7vs9gMTo+uoIrPSb8ScTtvw65+odKAlBj59dhnVp9zd7QUojOpXlL62Aw56U4oO+FALuevvMjiWeavKhJqlR7i5n9srYcrNV7ttmDw7kf/97P5zauIhxcjX+xHv4M=
+        github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
+        github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+        github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=
+        gitlab.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFSMqzJeV9rUzU4kWitGjeR4PWSa29SPqJ1fVkhtj3Hw9xjLVXVYrU9QlYWrOLXBpQ6KWjbjTDTdDkoohFzgbEY=
+        gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf
+        gitlab.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsj2bNKTBSpIYDEGk9KxsGh3mySTRgMtXL583qmBpzeQ+jqCMRgBqB98u3z++J1sKlXHWfM9dyhSevkMwSbhoR8XIq/U0tCNyokEi/ueaBMCvbcTHhO7FcwzY92WK4Yt0aGROY5qX2UKSeOvuP4D6TPqKF1onrSzH9bx9XUf2lEdWT/ia1NEKjunUqu1xOB/StKDHMoX4/OKyIzuS0q/T1zOATthvasJFoPrAjkohTyaDUz2LN5JoH839hViyEG82yB+MjcFV5MU3N1l1QL3cVUCh93xSaua1N85qivl+siMkPGbO5xR/En4iEY6K2XPASUEMaieWVNTRCtJ4S8H+9
+        ssh.dev.azure.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7Hr1oTWqNqOlzGJOfGJ4NakVyIzf1rXYd4d7wo6jBlkLvCA4odBlL0mDUyZ0/QUfTTqeu+tm22gOsv+VrVTMk6vwRU75gY/y9ut5Mb3bR5BV58dKXyq9A9UeB5Cakehn5Zgm6x1mKoVyf+FFn26iYqXJRgzIZZcZ5V6hrE0Qg39kZm4az48o0AUbf6Sp4SLdvnuMa2sVNwHBboS7EJkm57XQPVU3/QpyNLHbWDdzwtrlS+ez30S3AdYhLKEOxAG8weOnyrtLJAUen9mTkol8oII1edf7mWWbWVf0nBmly21+nZcmCTISQBtdcyPaEno7fFQMDD26/s0lfKob4Kw8H
+        vs-ssh.visualstudio.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7Hr1oTWqNqOlzGJOfGJ4NakVyIzf1rXYd4d7wo6jBlkLvCA4odBlL0mDUyZ0/QUfTTqeu+tm22gOsv+VrVTMk6vwRU75gY/y9ut5Mb3bR5BV58dKXyq9A9UeB5Cakehn5Zgm6x1mKoVyf+FFn26iYqXJRgzIZZcZ5V6hrE0Qg39kZm4az48o0AUbf6Sp4SLdvnuMa2sVNwHBboS7EJkm57XQPVU3/QpyNLHbWDdzwtrlS+ez30S3AdYhLKEOxAG8weOnyrtLJAUen9mTkol8oII1edf7mWWbWVf0nBmly21+nZcmCTISQBtdcyPaEno7fFQMDD26/s0lfKob4Kw8H
+
+      # -- Additional known hosts for private repositories
+      extraHosts: ''
+
+
+  controller:
+    # -- Application controller name string
+    name: application-controller
+
+    # -- The number of application controller pods to run.
+    # Additional replicas will cause sharding of managed clusters across number of replicas.
+    ## With dynamic cluster distribution turned on, sharding of the clusters will gracefully
+    ## rebalance if the number of replica's changes or one becomes unhealthy. (alpha)
+    replicas: 1
+
+    # -- Enable dynamic cluster distribution (alpha)
+    # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/dynamic-cluster-distribution
+    ## This is done using a deployment instead of a statefulSet
+    ## When replicas are added or removed, the sharding algorithm is re-run to ensure that the
+    ## clusters are distributed according to the algorithm. If the algorithm is well-balanced,
+    ## like round-robin, then the shards will be well-balanced.
+    dynamicClusterDistribution: false
+
+    # -- Runtime class name for the application controller
+    # @default -- `""` (defaults to global.runtimeClassName)
+    runtimeClassName: ""
+
+    # -- Application controller heartbeat time
+    # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/dynamic-cluster-distribution/#working-of-dynamic-distribution
+    heartbeatTime: 10
+
+    # -- Maximum number of controller revisions that will be maintained in StatefulSet history
+    revisionHistoryLimit: 5
+
+    ## Application controller Pod Disruption Budget
+    ## Ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+    
+
+    ## Application controller image
+    image:
+      # -- Repository to use for the application controller
+      # @default -- `""` (defaults to global.image.repository)
+      repository: ""
+      # -- Tag to use for the application controller
+      # @default -- `""` (defaults to global.image.tag)
+      tag: ""
+      # -- Image pull policy for the application controller
+      # @default -- `""` (defaults to global.image.imagePullPolicy)
+      imagePullPolicy: ""
+
+
+    # Application controller container ports
+    containerPorts:
+      # -- Metrics container port
+      metrics: 8082
+
+    # -- Host Network for application controller pods
+    hostNetwork: false
+
+    # -- [DNS configuration]
+    dnsConfig: {}
+    # -- Alternative DNS policy for application controller pods
+    dnsPolicy: "ClusterFirst"
+
+    # -- Application controller container-level security context
+    # @default -- See [values.yaml]
+    containerSecurityContext:
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+      capabilities:
+        drop:
+        - ALL
+
+  
+
+    # -- Automount API credentials for the Service Account into the pod.
+    automountServiceAccountToken: true
+
+    serviceAccount:
+      # -- Create a service account for the application controller
+      create: true
+      # -- Service account name
+      name: argocd-application-controller
+      # -- Annotations applied to created service account
+      annotations: {}
+      # -- Labels applied to created service account
+      labels: {}
+      # -- Automount API credentials for the Service Account
+      automountServiceAccountToken: true
+
+    ## Enable this and set the rules: to whatever custom rules you want for the Cluster Role resource.
+    ## Defaults to off
+    clusterRoleRules:
+      # -- Enable custom rules for the application controller's ClusterRole resource
+      enabled: false
+      # -- List of custom rules for the application controller's ClusterRole resource
+      rules: []
+
+
+
+  server:
+    # -- Argo CD server name
+    name: server
+    replicas: 1
+
+    containerPorts:
+      # -- Server container port
+      server: 8080
+      # -- Metrics container port
+      metrics: 8083
+
+    # -- Alternative DNS policy for Server pods
+    dnsPolicy: "ClusterFirst"
+
+    # -- Server container-level security context
+    # @default -- See [values.yaml]
+    containerSecurityContext:
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+      capabilities:
+        drop:
+        - ALL
+
+
+
+    ## Server service configuration
+    service:
+      type: ClusterIP
+      # -- Server service http port for NodePort service type (only if `server.service.type` is set to "NodePort")
+      nodePortHttp: 30080
+      # -- Server service https port for NodePort service type (only if `server.service.type` is set to "NodePort")
+      nodePortHttps: 30443
+      # -- Server service http port
+      servicePortHttp: 80
+      # -- Server service https port
+      servicePortHttps: 443
+      # -- Server service http port name, can be used to route traffic via istio
+      servicePortHttpName: http
+      # -- Server service https port name, can be used to route traffic via istio
+      servicePortHttpsName: https
+      # -- Server service https port appProtocol
+      ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#application-protocol
+      servicePortHttpsAppProtocol: ""
+      # -- The class of the load balancer implementation
+      loadBalancerClass: ""
+      # -- LoadBalancer will get created with the IP specified in this field
+      loadBalancerIP: ""
+      # -- Source IP ranges to allow access to service from
+      ## EKS Ref: https://repost.aws/knowledge-center/eks-cidr-ip-address-loadbalancer
+      ## GKE Ref: https://cloud.google.com/kubernetes-engine/docs/concepts/network-overview#limit-connectivity-ext-lb
+      loadBalancerSourceRanges: []
+      # -- Server service external IPs
+      externalIPs: []
+      # -- Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+      ## Ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      externalTrafficPolicy: Cluster
+      # -- Used to maintain session affinity. Supports `ClientIP` and `None`
+      ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      sessionAffinity: None
+
+
+  repoServer:
+
+    name: repo-server
+    replicas: 1
+
+
+    # Repo server container ports
+    containerPorts:
+      # -- Repo server container port
+      server: 8081
+      # -- Metrics container port
+      metrics: 8084
+
+    containerSecurityContext:
+      runAsNonRoot: true
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+      capabilities:
+        drop:
+        - ALL
+
+    ## Repo server service configuration
+    service:
+      # -- Repo server service annotations
+      annotations: {}
+      # -- Repo server service labels
+      labels: {}
+      # -- Repo server service port
+      port: 8081
+      # -- Repo server service port name
+      portName: tcp-repo-server
+
+
+#UsTPE1fAGaZCuGQy
