@@ -6,7 +6,7 @@ This repository provides Helm charts to deploy the **LGTM stack**—**Loki**, **
 
 ## Architecture Overview
 
-![Architecture Diagram Placeholder](./path/to/your/image.png)
+![Architecture Diagram Placeholder](LGTM Stack.jpeg)
 
 
 
