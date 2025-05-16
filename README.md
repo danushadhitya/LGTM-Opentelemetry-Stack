@@ -1,12 +1,12 @@
 # LGTM Stack for OpenTelemetry Pipeline
 
-This repository provides Helm charts to deploy the **LGTM stack**—**Loki**, **Grafana**, **Tempo**, and **Mimir** integrated with a robust [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) pipeline for Kubernetes observability. The stack enables collection, storage, and visualization of **logs**, **metrics**, and **traces** from your Kubernetes cluster using modern, open-source tools.
+This repository provides Helm charts to deploy the **LGTM stack**—**Loki**, **Grafana**, **Tempo**, and **Mimir** integrated with [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) pipeline for Kubernetes observability. The stack enables collection, storage, and visualization of **logs**, **metrics**, and **traces** from your Kubernetes cluster using modern, open-source tools.
 
 ---
 
 ## Architecture Overview
 
-![Architecture Diagram Placeholder](LGTM Stack.jpeg)
+![Architecture Diagram Placeholder](image.jpeg)
 
 
 
@@ -16,7 +16,7 @@ This repository provides Helm charts to deploy the **LGTM stack**—**Loki**, **
 
 ### Objective
 
-To collect telemetry (logs, metrics, and traces) from a Kubernetes cluster and route it through OpenTelemetry Collectors to dedicated backends—**Grafana Mimir**, **Loki**, and **Tempo**—for durable storage and visualization via **Grafana dashboards**.
+To collect telemetry (logs, metrics, and traces) from a Kubernetes cluster and route it through OpenTelemetry Collectors to dedicated backends **Grafana Mimir**, **Loki**, and **Tempo** for durable storage and visualization via **Grafana dashboards**.
 
 ---
 
