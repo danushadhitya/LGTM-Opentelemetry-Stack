@@ -97,7 +97,9 @@ grafana:
           allowUiUpdates: true
           options:
             path: /var/lib/grafana/dashboards
-  dashboards: 
-    default:
-      default:
-        file: dashboards_out/apiserver.json
+
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      folder: /var/lib/grafana/dashboards
