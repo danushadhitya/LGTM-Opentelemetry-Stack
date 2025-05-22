@@ -83,3 +83,21 @@ grafana:
           jsonData:
             httpHeaderName1: 'X-Scope-OrgID'  
 
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: 'default'
+          orgId: 1
+          folder: 'Mixins Folder'
+          type: file
+          disableDeletion: true
+          # <int> how often Grafana will scan for changed dashboards
+          updateIntervalSeconds: 10
+          allowUiUpdates: true
+          options:
+            path: /var/lib/grafana/dashboards
+  dashboards: 
+    default:
+      custom-dashboard:
+        file: dashboards_out/apiserver.json
