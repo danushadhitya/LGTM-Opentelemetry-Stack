@@ -66,4 +66,20 @@ mimir-distributed:
     enabled: false     
 grafana:
   namespaceOverride: "grafana"
- 
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: mimir
+          type: prometheus
+          url: http://grafana-mimir-nginx.grafana.svc.cluster.local/prometheus
+          isDefault: true
+          editable: true
+          basicAuth: true
+          basicAuthUser: hello
+          secureJsonData:
+            httpHeaderValue1: 'tenant-1'
+            basicAuthPassword: hello
+          jsonData:
+            httpHeaderName1: 'X-Scope-OrgID'  
+
