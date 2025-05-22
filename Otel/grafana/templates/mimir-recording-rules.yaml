@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mimir-recording-rules
+  namespace: grafana
+  labels:
+    mimir_rule: "1"
+data:
+  recording-rules.yaml: |
+{{ .Files.Get "prometheus_rules.yaml" | indent 4 }}

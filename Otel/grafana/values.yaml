@@ -63,7 +63,19 @@ mimir-distributed:
       username: hello
       password: hello
   gateway:
-    enabled: false     
+    enabled: false   
+  ruler:
+    extraVolumes:
+      - name: recording-rules
+        configMap:
+          name: mimir-recording-rules
+
+    extraVolumeMounts:
+      - name: recording-rules
+        mountPath: /temp/rules/tenant-1
+        readOnly: true    
+
+
 grafana:
   namespaceOverride: "grafana"
   datasources:
