@@ -99,5 +99,5 @@ grafana:
             path: /var/lib/grafana/dashboards
   dashboards: 
     default:
-      custom-dashboard:
+      default:
         file: dashboards_out/apiserver.json
